@@ -1,0 +1,62 @@
+﻿@page "/Studentform"
+@using Dec13maui.Data 
+@using System.Text.Json
+@using System.Text.Json.Serialization; 
+
+
+<h3>Student Form</h3>
+
+<table style="background-color:antiquewhite">
+	<tr>
+		<th>Name </th>
+		<th>Address </th>
+		<th>Phone </th>
+		<th>Email </th>
+	</tr>
+	@foreach (var stu in student)
+	{
+		<tr>
+			<td>@stu.Name</td>
+			<td>@stu.Address</td>
+			<td>@stu.Phone</td>
+			<td>@stu.Email</td>
+		</tr>
+	}
+</table>
+
+
+<EditForm Model="@model">
+	<label for="name">Name:</label> <br />
+	<InputText type="text" id="Name" @bind-Value=model.Name/> <br/> <br/> 
+	<label for="Address">Address:</label> <br/>
+	<InputText type="text" id="Address" @bind-Value=model.Address /> <br /> <br /> 
+	<label for="phone">Phone:</label> <br />
+	<InputText type="text" id="Phone" @bind-Value=model.Phone /> <br /> <br /> 
+	<label for="email">Email:</label> <br />
+	<InputText type="text" id="Email" @bind-Value=model.Email /> <br /> <br /> 
+
+	<input class="btn btn-primary" type="submit" value="Add" @onclick="main" />
+	<input type="reset" class="btn btn-primary" />
+	
+</EditForm>
+
+@code{
+	StudentModel model = new StudentModel();
+
+	string _filePath = "D:\\studentRecord.json";
+	private List<StudentModel> student { get; set; }
+
+	protected override void OnInitialized()
+	{
+		student = WriteReadToCsv.GetAll(_filePath);
+	}
+
+
+	public void main() 
+	{
+		WriteReadToCsv.WritejsonDataToText( model, _filePath);
+	}
+
+	
+
+}
